@@ -1,50 +1,70 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet, ScrollView } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const courses = [
   {
     id: '1',
-    name: 'Bachelor of Business Administration',
+    name: 'BSC in Business Management',
     description: 'Learn essential business strategies and management skills.',
-    image: { uri: 'https://your-image-url.com/business.jpg' },
-
+    image: { uri: 'https://media.istockphoto.com/id/1351446226/photo/businesswoman-addressing-a-meeting-in-office.jpg?s=612x612&w=is&k=20&c=Dfp-fWVC74ZqAQWnKOSkTdYA7omEgboHZrwHchh8W5E=' },
+    requirements: [
+            'High school LGCSE  with 4 credits including English or equivalent certifcate',
+      'Basic understanding of economics and management principles',
+      'Good communication skills'
+    ]
   },
   {
     id: '2',
-    name: 'Bachelor of Computer Science',
+    name: 'BSC in Software Engineering',
     description: 'Develop programming and problem-solving skills.',
-    image: { uri: 'https://your-image-url.com/business.jpg' },
+    image: { uri: 'https://media.istockphoto.com/id/1412569990/photo/programmer-is-coding-and-programming-software.jpg?s=612x612&w=is&k=20&c=mCN7EcZ3977lwqn-1lWkR5aug-TUKkHNJQLVC5Cco-Q=' },
+    requirements: [
+            'High school LGCSE  with 4 credits including Maths or equivalent certifcate',
+      'Strong foundation in mathematics',
+      'Basic knowledge of programming languages (e.g., Python, Java)'
+    ]
   },
   {
     id: '3',
-    name: 'Bachelor of Architecture',
+    name: 'BSC in Architecture',
     description: 'Explore architectural design and construction.',
-    image: { uri: 'https://your-image-url.com/business.jpg' },
-
+    image: { uri: 'https://media.istockphoto.com/id/1398135990/photo/upscale-modern-mansion-with-pool.jpg?s=612x612&w=is&k=20&c=6o41xYH0CRZeK-2XPhv_Bhaz1FpPhFiAAyoZegwubAY=' },
+    requirements: [
+            'High school LGCSE  with 4 credits including Maths or equivalent certifcate',
+      'Interest in design and construction',
+      'Basic understanding of physics'
+    ]
   },
   {
     id: '4',
-    name: 'Bachelor of Fashion Design',
+    name: 'BSC in Fashion Design',
     description: 'Unleash creativity in fashion and textile design.',
-    image: { uri: 'https://your-image-url.com/business.jpg' },
-
+    image: { uri: 'https://media.istockphoto.com/id/1170261026/photo/young-fashion-designer.jpg?s=612x612&w=is&k=20&c=Ott9qVNGnCkh7EZ6y-I4D-ewBRfrARQ8HmA34oPoGIA=' },
+    requirements: [
+            'High school LGCSE  with 4 credits including English or equivalent certifcate',
+      'Creative flair for design and textiles',
+      'Knowledge of sewing techniques and fashion trends'
+    ]
   },
   {
     id: '5',
-    name: 'Bachelor of Multimedia Arts',
+    name: 'BSC in Media and Broadcasting',
     description: 'Master digital arts, animation, and media design.',
-    image: { uri: 'https://your-image-url.com/business.jpg' },
-
+    image: { uri: 'https://media.istockphoto.com/id/1127729244/photo/group-of-students-working-in-tv-studio.jpg?s=612x612&w=is&k=20&c=s29-ceqlxyn4O7nX7w74MpxJOniq9MSeh4Lr9i6n_-w=' },
+    requirements: [
+      'High school LGCSE  with 4 credits including English or equivalent certifcate',
+      'Interest in media production and broadcasting',
+      'Basic knowledge of video editing software and digital arts'
+    ]
   },
 ];
 
 const CourseItem = ({ course }) => {
   const [rating, setRating] = useState(0);
 
-  const increaseRating = () => {
-    if (rating < 6) {
-      setRating(rating + 1);
-    }
+  const handleRating = (index) => {
+    setRating(index === rating ? 0 : index);  // Reset the rating if the same star is clicked again
   };
 
   return (
@@ -52,88 +72,117 @@ const CourseItem = ({ course }) => {
       <Image source={course.image} style={styles.courseImage} />
       <Text style={styles.courseTitle}>{course.name}</Text>
       <Text style={styles.courseDescription}>{course.description}</Text>
-      <TouchableOpacity style={styles.ratingButton} onPress={increaseRating}>
-        <Text style={styles.buttonText}>Rate +</Text>
-      </TouchableOpacity>
-      <Text style={styles.ratingText}>Rating: {rating}/6</Text>
+      
+      {/* Rating Section */}
+      <View style={styles.starsContainer}>
+        {[...Array(5)].map((_, i) => (  // 5-star rating system
+          <TouchableOpacity key={i} onPress={() => handleRating(i + 1)}>
+            <Icon
+              name={i < rating ? 'star' : 'star-o'}
+              size={30}
+              color="#FFD700"
+            />
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {/* Requirements Section */}
+      <View style={styles.requirementsContainer}>
+        <Text style={styles.requirementsTitle}>Requirements:</Text>
+        {course.requirements.map((requirement, index) => (
+          <Text key={index} style={styles.requirementItem}>
+            - {requirement}
+          </Text>
+        ))}
+      </View>
     </View>
   );
 };
 
 const App = () => {
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.header}>Limkokwing University Courses</Text>
       <FlatList
         data={courses}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <CourseItem course={item} />}
+        contentContainerStyle={styles.listContainer}
       />
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: '#f8f9fa',
     alignItems: 'center',
-    padding: 10,
+    paddingVertical: 20,
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    marginTop: 10,
     color: '#333',
+  },
+  listContainer: {
+    alignItems: 'center',
   },
   courseContainer: {
     backgroundColor: '#fff',
-    padding: 15,
-    marginVertical: 10,
-    borderRadius: 10,
+    paddingVertical: 40,
+    paddingHorizontal: 50,
+    marginVertical: 20,
+    borderRadius: 15,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 5,
     alignItems: 'center',
-    width: '90%',
+    width: '85%',
   },
   courseImage: {
-    width: 150,
-    height: 100,
+    width: 250,
+    height: 150,
     borderRadius: 10,
-    marginBottom: 10,
+    marginBottom: 20,
   },
   courseTitle: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#222',
     textAlign: 'center',
-  },
-  courseDescription: {
-    fontSize: 14,
-    color: '#555',
-    textAlign: 'center',
     marginBottom: 10,
   },
-  ratingButton: {
-    backgroundColor: '#007bff',
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    marginBottom: 5,
-  },
-  buttonText: {
-    color: '#fff',
+  courseDescription: {
     fontSize: 16,
+    color: '#555',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  starsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  requirementsContainer: {
+    marginTop: 20,
+    alignItems: 'flex-start',
+    width: '100%',
+    paddingHorizontal: 10,
+  },
+  requirementsTitle: {
+    fontSize: 18,
     fontWeight: 'bold',
-  },
-  ratingText: {
-    fontSize: 16,
     color: '#333',
-    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  requirementItem: {
+    fontSize: 16,
+    color: '#555',
+    marginBottom: 5,
   },
 });
 
