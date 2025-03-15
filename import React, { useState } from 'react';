@@ -1,0 +1,140 @@
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
+
+const courses = [
+  {
+    id: '1',
+    name: 'Bachelor of Business Administration',
+    description: 'Learn essential business strategies and management skills.',
+    image: { uri: 'https://your-image-url.com/business.jpg' },
+
+  },
+  {
+    id: '2',
+    name: 'Bachelor of Computer Science',
+    description: 'Develop programming and problem-solving skills.',
+    image: { uri: 'https://your-image-url.com/business.jpg' },
+  },
+  {
+    id: '3',
+    name: 'Bachelor of Architecture',
+    description: 'Explore architectural design and construction.',
+    image: { uri: 'https://your-image-url.com/business.jpg' },
+
+  },
+  {
+    id: '4',
+    name: 'Bachelor of Fashion Design',
+    description: 'Unleash creativity in fashion and textile design.',
+    image: { uri: 'https://your-image-url.com/business.jpg' },
+
+  },
+  {
+    id: '5',
+    name: 'Bachelor of Multimedia Arts',
+    description: 'Master digital arts, animation, and media design.',
+    image: { uri: 'https://your-image-url.com/business.jpg' },
+
+  },
+];
+
+const CourseItem = ({ course }) => {
+  const [rating, setRating] = useState(0);
+
+  const increaseRating = () => {
+    if (rating < 6) {
+      setRating(rating + 1);
+    }
+  };
+
+  return (
+    <View style={styles.courseContainer}>
+      <Image source={course.image} style={styles.courseImage} />
+      <Text style={styles.courseTitle}>{course.name}</Text>
+      <Text style={styles.courseDescription}>{course.description}</Text>
+      <TouchableOpacity style={styles.ratingButton} onPress={increaseRating}>
+        <Text style={styles.buttonText}>Rate +</Text>
+      </TouchableOpacity>
+      <Text style={styles.ratingText}>Rating: {rating}/6</Text>
+    </View>
+  );
+};
+
+const App = () => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Limkokwing University Courses</Text>
+      <FlatList
+        data={courses}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <CourseItem course={item} />}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f8f9fa',
+    alignItems: 'center',
+    padding: 10,
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    marginTop: 10,
+    color: '#333',
+  },
+  courseContainer: {
+    backgroundColor: '#fff',
+    padding: 15,
+    marginVertical: 10,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+    alignItems: 'center',
+    width: '90%',
+  },
+  courseImage: {
+    width: 150,
+    height: 100,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  courseTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#222',
+    textAlign: 'center',
+  },
+  courseDescription: {
+    fontSize: 14,
+    color: '#555',
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  ratingButton: {
+    backgroundColor: '#007bff',
+    paddingVertical: 8,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginBottom: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  ratingText: {
+    fontSize: 16,
+    color: '#333',
+    fontWeight: 'bold',
+  },
+});
+
+export default App;
